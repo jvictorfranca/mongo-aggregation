@@ -1,0 +1,4 @@
+DBNAME=aggregations ./scripts/resetdb.sh assets
+
+
+./scripts/evaluate.sh desafioN
