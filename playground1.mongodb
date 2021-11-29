@@ -1,25 +1,20 @@
 use("aggregations");
-db.movies.aggregate([
-
-  { $match: {
-    "imdb.rating": { $gte: 7 },
-    genres: { $nin: ["Crime", "Horror"] },
-    rated: { $in: ["PG", "G"] },
-    languages: { $all: ["English", "Spanish"] },
-  } 
-  },
-
-  { $sort: {
-    year:-1, "imdb.rating":-1, title:1
+db.trips.aggregate([
+  {$addFields:{
+    tempo: {$subtract: ["$stopTime", "$startTime"]}
   }},
-
-  { $project: {
-    _id: 0,
-    titulo: "$title",
-    avaliado: "$rated",
-    notaIMDB: "$imdb.rating",
-    votosIMDB:"$imdb.votes",
-    ano:"$year"    
+  {$addFields: {
+    tempoHoras: {
+      $divide: ["$tempo", 3600000]
+    }
   }},
-  
-]);
+  {$group: {
+    _id: "$usertype",
+    avgDuration: {$avg: "$tempoHoras"}
+  }},
+  {$project: {
+    _id: false,
+    tipo: "$_id",
+    duracaoMedia: {$round: ["$avgDuration", 2]}
+  }},
+])
