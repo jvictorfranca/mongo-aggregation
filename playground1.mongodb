@@ -1,20 +1,29 @@
-use("aggregations");
+use("aggregations")
 db.trips.aggregate([
-  {$addFields:{
-    tempo: {$subtract: ["$stopTime", "$startTime"]}
-  }},
-  {$addFields: {
+  { $addFields: {
+    tempo: { $subtract: ["$stopTime", "$startTime"] },
+  } },
+  { $addFields: {
     tempoHoras: {
-      $divide: ["$tempo", 3600000]
-    }
-  }},
-  {$group: {
+      $divide: ["$tempo", 3600000],
+    },
+  } },
+  { $group: {
     _id: "$usertype",
-    avgDuration: {$avg: "$tempoHoras"}
-  }},
-  {$project: {
+    avgDuration: { $avg: "$tempoHoras" },
+  } },
+  { $project: {
     _id: false,
     tipo: "$_id",
-    duracaoMedia: {$round: ["$avgDuration", 2]}
-  }},
-])
+    duracaoMedia: { $round: ["$avgDuration", 2] },
+  } },
+]);
+
+
+
+// use("aggregations");
+// db.trips.aggregate([
+//   {$match:{
+//     startTime: {$and: [{$gte: ISODate("2016-03-10")}, {$lt: ISODate("2016-03-11")}]}
+//   }}
+// ])

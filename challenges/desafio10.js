@@ -11,6 +11,9 @@ db.trips.aggregate([
     _id: "$usertype",
     avgDuration: { $avg: "$tempoHoras" },
   } },
+  {
+    $sort: { duracaoMedia: 1 },
+  },
   { $project: {
     _id: false,
     tipo: "$_id",
